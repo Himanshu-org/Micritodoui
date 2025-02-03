@@ -15,7 +15,7 @@ jobs:
       with:
         client-id: ${{ secrets.CLIENT_ID }}
         tenant-id:  ${{ secrets.TENANT_ID }}
-        subscription-id:  ${{ SUBSCRIPTION_ID }}
+        subscription-id:  ${{ secrets.SUBSCRIPTION_ID }}
         
     - name: docker install
       uses: docker/setup-docker-action@v4.1.0
