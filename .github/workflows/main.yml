@@ -1,7 +1,8 @@
 name: deployment to aks
 on: [workflow_dispatch]
 permissions:
-  id-token: read  
+  id-token: write
+  contents: read
 
 jobs:
   docker_build_push_acr:
