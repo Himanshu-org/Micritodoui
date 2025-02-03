@@ -68,7 +68,7 @@ jobs:
 
       # Deploys application based on manifest files from previous step
       - name: Deploy application
-        run: helm install him_todoapp ./todoapp_helm/ -f ./todoapp_helm/dev.values.yaml
+        run: helm install himtodoapp ./todoapp_helm/ -f ./todoapp_helm/dev.values.yaml
     
   
   
