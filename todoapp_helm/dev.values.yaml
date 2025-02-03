@@ -1,5 +1,5 @@
 microtodoui:
-  name: dev-microtodoui
+  name: dev-microtodoui1
   tier: frontend
   app: todoapp
   acrname: himacrtodoapplatestt
@@ -12,14 +12,14 @@ microtodoui:
   cpuRequest: 50m
   memoryRequest: 128Mi
   replicas: 1
-  ingressName: devreactuiingress
+  ingressName: devreactuiingress1
   ingressClassName: azure-application-gateway
   ingresshost: dev.todoapp.consistant.online
-  serviceName: devreactuiservice
+  serviceName: devreactuiservice1
   servicePort: 80
   serviceType: ClusterIP
 addtask:
-  name: dev-backend-addtask-pod
+  name: dev-backend-addtask-pod1
   tier: backend
   app: todoapp
   acrname: himacrtodoapplatestt
@@ -32,14 +32,14 @@ addtask:
   cpuRequest: 50m
   memoryRequest: 128Mi
   replicas: 1
-  ingressName: devaddtaskingress
+  ingressName: devaddtaskingress1
   ingressClassName: azure-application-gateway
   ingresshost: dev.addtask.todoapp.consistant.online
-  serviceName: dev-add-task-service
+  serviceName: dev-add-task-service1
   servicePort: 8000
   serviceType: ClusterIP
 deletetask:
-  name: dev-backend-deletetask-pod
+  name: dev-backend-deletetask-pod1
   tier: backend
   app: todoapp
   acrname: himacrtodoapplatestt
@@ -52,14 +52,14 @@ deletetask:
   cpuRequest: 50m
   memoryRequest: 128Mi
   replicas: 1
-  ingressName: devdeletetaskingress
+  ingressName: devdeletetaskingress1
   ingressClassName: azure-application-gateway
   ingresshost: dev.deletetask.todoapp.consistant.online
-  serviceName: dev-delete-task-service
+  serviceName: dev-delete-task-service1
   servicePort: 8000
   serviceType: ClusterIP
 gettask:
-  name: dev-backend-gettask-pod
+  name: dev-backend-gettask-pod1
   tier: backend
   app: todoapp
   acrname: himacrtodoapplatestt
@@ -72,9 +72,9 @@ gettask:
   cpuRequest: 50m
   memoryRequest: 128Mi
   replicas: 1
-  ingressName: devgettaskingress
+  ingressName: devgettaskingress1
   ingressClassName: azure-application-gateway
   ingresshost: dev.gettask.todoapp.consistant.online
-  serviceName: dev-get-task-service
+  serviceName: dev-get-task-service1
   servicePort: 8000
   serviceType: ClusterIP
