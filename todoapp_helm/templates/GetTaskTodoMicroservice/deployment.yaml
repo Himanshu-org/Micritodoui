@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.gettask.name }}
+  labels:
+    tier: {{ .Values.gettask.tier }}
+    app: {{ .Values.gettask.app }}
+spec:
+  replicas: {{ .Values.gettask.replicas }}
+  selector:
+    matchExpressions:
+    - key: tier 
+      values: 
+      - {{ .Values.gettask.tier }}
+      operator: In
+  template:
+    metadata:
+      labels:
+        tier: {{ .Values.gettask.tier }}
+    spec:
+      tolerations:         # Give toleration power so that pod will schedule to that Node because it has taint
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: PreferNoSchedule
+      affinity:
+        nodeAffinity:      # Pod will schedule according to below role
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1      # Give highest weight (1-100) more the weight more chances pod will scheduleto that prefrence
+            preference:
+              matchExpressions:
+              - key: project
+                operator: In
+                values:
+                - {{ .Values.gettask.app }}
+        podAntiAffinity:   #By this rule 2 two are not created on same node with matchexpression
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: project
+                operator: In
+                values: 
+                - {{ .Values.gettask.app }}
+            topologyKey: topology.kubernetes.io/region  
+      containers:
+      - image: "{{ .Values.gettask.acrname }}.azurecr.io/{{ .Values.gettask.image }}:{{ .Values.gettask.version }}"
+        name: {{ .Values.gettask.containerName }}
+        env:
+        - name: CONNECTION_STRING
+          value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:mssql-latesttodo.database.windows.net,1433;Database=db-latesttodo;Uid=azure;Pwd=d5Va*=5j4c0rlaFa;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+        ports:
+        - containerPort: {{ .Values.gettask.containerPort }}
+        resources:
+          limits:
+            cpu: {{ .Values.gettask.cpuLimit }}
+            memory:  {{ .Values.gettask.memoryLimit }}
+          requests:
+            cpu: {{ .Values.gettask.cpuRequest }}
+            memory: {{ .Values.gettask.memoryRequest }}

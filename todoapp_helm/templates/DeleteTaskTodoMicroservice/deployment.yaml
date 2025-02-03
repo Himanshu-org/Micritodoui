@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deletetask.name }}
+  labels:
+    tier: {{ .Values.deletetask.tier }}
+    app: {{ .Values.deletetask.app }}
+spec:
+  replicas: {{ .Values.deletetask.replicas }}
+  selector:
+    matchExpressions:
+    - key: tier 
+      values: 
+      - {{ .Values.deletetask.tier }}
+      operator: In
+  template:
+    metadata:
+      labels:
+        tier: {{ .Values.deletetask.tier }}
+    spec:
+      tolerations:         # Give toleration power so that pod will schedule to that Node because it has taint
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: PreferNoSchedule
+      affinity:
+        nodeAffinity:      # Pod will schedule according to below role
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1      # Give highest weight (1-100) more the weight more chances pod will scheduleto that prefrence
+            preference:
+              matchExpressions:
+              - key: project
+                operator: In
+                values:
+                - {{ .Values.deletetask.app }}
+        podAntiAffinity:   #By this rule 2 two are not created on same node with matchexpression
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: project
+                operator: In
+                values: 
+                - {{ .Values.deletetask.app }}
+            topologyKey: topology.kubernetes.io/region  
+      containers:
+      - image: "{{ .Values.deletetask.acrname }}.azurecr.io/{{ .Values.deletetask.image }}:{{ .Values.deletetask.version }}"
+        name: {{ .Values.deletetask.containerName }}
+        env:
+        - name: CONNECTION_STRING
+          value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:mssql-latesttodo.database.windows.net,1433;Database=db-latesttodo;Uid=azure;Pwd=d5Va*=5j4c0rlaFa;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+        ports:
+        - containerPort: {{ .Values.deletetask.containerPort }}
+        resources:
+          limits:
+            cpu: {{ .Values.deletetask.cpuLimit }}
+            memory:  {{ .Values.deletetask.memoryLimit }}
+          requests:
+            cpu: {{ .Values.deletetask.cpuRequest }}
+            memory: {{ .Values.deletetask.memoryRequest }}
+          
+
+    

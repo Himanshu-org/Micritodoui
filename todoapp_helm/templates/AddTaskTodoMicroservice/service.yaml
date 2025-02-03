@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.addtask.serviceName }}
+  labels:
+    app: {{ .Values.addtask.app }}
+    tier: {{  .Values.addtask.tier }}
+spec:
+  type: {{ .Values.addtask.serviceType }}
+  selector:
+    tier: {{ .Values.addtask.tier }}
+  ports:
+  - port: {{ .Values.addtask.servicePort }}
+    targetPort: {{  .Values.addtask.containerPort }}

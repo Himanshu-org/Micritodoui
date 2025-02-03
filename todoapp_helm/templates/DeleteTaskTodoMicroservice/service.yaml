@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deletetask.serviceName }}
+  labels:
+    app: {{ .Values.deletetask.app }}
+    tier: {{  .Values.deletetask.tier }}
+spec:
+  type: {{ .Values.deletetask.serviceType }}
+  selector:
+    tier: {{ .Values.deletetask.tier }}
+  ports:
+  - port: {{ .Values.deletetask.servicePort }}
+    targetPort: {{  .Values.deletetask.containerPort }}

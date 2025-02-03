@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.microtodoui.serviceName }}
+  labels:
+    app: {{ .Values.microtodoui.app }}
+    tier: {{ .Values.microtodoui.tier }}
+spec:
+  type: {{ .Values.microtodoui.serviceType }}
+  selector:
+    tier: {{ .Values.microtodoui.tier }}
+  ports:
+  - port: {{ .Values.microtodoui.servicePort }}
+    targetPort: {{ .Values.microtodoui.containerPort }}
+
+
+
+
+
+
+
+
+
+

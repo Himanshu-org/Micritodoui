@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.microtodoui.name }}-pod
+  labels:
+    tier: {{ .Values.microtodoui.tier }}
+    app: {{ .Values.microtodoui.app }}
+spec:
+  replicas: 1
+  selector:
+    matchExpressions:
+    - key: tier 
+      values: 
+      - {{ .Values.microtodoui.tier }}
+      operator: In
+  template:
+    metadata:
+      labels:
+        tier: {{ .Values.microtodoui.tier }}
+    spec:
+      tolerations:         # Give toleration power so that pod will schedule to that Node because it has taint
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: PreferNoSchedule
+      affinity:
+        nodeAffinity:      # Pod will schedule according to below role
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1      # Give highest weight (1-100) more the weight more chances pod will scheduleto that prefrence
+            preference:
+              matchExpressions:
+              - key: project
+                operator: In
+                values:
+                - {{ .Values.microtodoui.app }}
+        podAntiAffinity:   #By this rule 2 two are not created on same node with matchexpression
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: project
+                operator: In
+                values: 
+                - {{ .Values.microtodoui.app }}
+            topologyKey: topology.kubernetes.io/region  
+      containers:
+      - image: "{{ .Values.microtodoui.acrname}}.azurecr.io/{{ .Values.microtodoui.image}}:{{ .Values.microtodoui.version}}"
+        name: {{ .Values.microtodoui.containerName }}
+        ports:
+        - containerPort: {{ .Values.microtodoui.containerPort }}
+        resources:
+          limits:
+            cpu: {{ .Values.microtodoui.cpuLimit }}
+            memory: {{ .Values.microtodoui.memoryLimit }}
+          requests:
+            cpu: {{ .Values.microtodoui.cpuRequest }}
+            memory: {{  .Values.microtodoui.memoryRequest }}
+          
+
+    

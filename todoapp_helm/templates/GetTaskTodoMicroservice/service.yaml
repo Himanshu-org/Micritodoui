@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.gettask.serviceName }}
+  labels:
+    app: {{ .Values.gettask.app }}
+    tier: {{  .Values.gettask.tier }}
+spec:
+  type: {{ .Values.gettask.serviceType }}
+  selector:
+    tier: {{ .Values.gettask.tier }}
+  ports:
+  - port: {{ .Values.gettask.servicePort }}
+    targetPort: {{  .Values.gettask.containerPort }}

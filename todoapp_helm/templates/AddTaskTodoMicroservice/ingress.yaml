@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.addtask.ingressName }}
+  labels:
+    name: {{ .Values.addtask.ingressName }}
+spec:
+  ingressClassName: azure-application-gateway
+  rules:
+  - host: {{ .Values.addtask.ingresshost }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ .Values.addtask.serviceName }}
+            port: 
+              number: {{ .Values.addtask.servicePort }}
