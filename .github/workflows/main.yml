@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     name: deploy to aks using helm
     needs: [docker_build_push_acr]
+    environment: deployment 
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v4
